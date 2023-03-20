@@ -38,7 +38,7 @@ func main() {
             },
             Middlewares: []echo.MiddlewareFunc{
                 apis.ActivityLogger(app),
-                // Add authentication middleware if necessary
+                apis.RequireRecordAuth(),
             },
         })
 
