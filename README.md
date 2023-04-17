@@ -76,3 +76,7 @@ You can find me on
 - twitter [@renatofontes](https://twitter.com/renatofontes)
 - email renato[at]komu.blog
 - komublog [@renato](https://komu.blog/@renato)
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
