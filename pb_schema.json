@@ -1,0 +1,580 @@
+[
+  {
+    "id": "dnjvvhch2k38ojv",
+    "name": "config",
+    "type": "base",
+    "system": false,
+    "schema": [
+      {
+        "id": "swmeiqms",
+        "name": "user",
+        "type": "relation",
+        "system": false,
+        "required": true,
+        "unique": true,
+        "options": {
+          "collectionId": "_pb_users_auth_",
+          "cascadeDelete": false,
+          "minSelect": null,
+          "maxSelect": 1,
+          "displayFields": []
+        }
+      },
+      {
+        "id": "xfdulcoj",
+        "name": "default_to_all_babbles",
+        "type": "bool",
+        "system": false,
+        "required": false,
+        "unique": false,
+        "options": {}
+      }
+    ],
+    "listRule": null,
+    "viewRule": "@request.auth.id = user",
+    "createRule": "@request.auth.id = @request.data.user",
+    "updateRule": "@request.auth.id = @request.data.user",
+    "deleteRule": null,
+    "options": {}
+  },
+  {
+    "id": "bbozbukkk4s9sew",
+    "name": "followers",
+    "type": "base",
+    "system": false,
+    "schema": [
+      {
+        "id": "fnfhrsns",
+        "name": "follower",
+        "type": "relation",
+        "system": false,
+        "required": true,
+        "unique": false,
+        "options": {
+          "collectionId": "_pb_users_auth_",
+          "cascadeDelete": false,
+          "minSelect": null,
+          "maxSelect": 1,
+          "displayFields": [
+            "username",
+            "name",
+            "avatar"
+          ]
+        }
+      },
+      {
+        "id": "3khy0acp",
+        "name": "followee",
+        "type": "relation",
+        "system": false,
+        "required": true,
+        "unique": false,
+        "options": {
+          "collectionId": "_pb_users_auth_",
+          "cascadeDelete": false,
+          "minSelect": null,
+          "maxSelect": 1,
+          "displayFields": [
+            "username",
+            "name",
+            "avatar"
+          ]
+        }
+      }
+    ],
+    "listRule": null,
+    "viewRule": "",
+    "createRule": "@request.auth.id = @request.data.follower",
+    "updateRule": null,
+    "deleteRule": "@request.auth.id = follower || @request.auth.id = followee",
+    "options": {}
+  },
+  {
+    "id": "s8qi0x84afoqcup",
+    "name": "blocked",
+    "type": "base",
+    "system": false,
+    "schema": [
+      {
+        "id": "ep4m0vsz",
+        "name": "user",
+        "type": "relation",
+        "system": false,
+        "required": true,
+        "unique": false,
+        "options": {
+          "collectionId": "_pb_users_auth_",
+          "cascadeDelete": false,
+          "minSelect": null,
+          "maxSelect": null,
+          "displayFields": []
+        }
+      },
+      {
+        "id": "wslwww3e",
+        "name": "blocked",
+        "type": "relation",
+        "system": false,
+        "required": true,
+        "unique": false,
+        "options": {
+          "collectionId": "_pb_users_auth_",
+          "cascadeDelete": false,
+          "minSelect": null,
+          "maxSelect": null,
+          "displayFields": [
+            "name",
+            "avatar",
+            "username"
+          ]
+        }
+      }
+    ],
+    "listRule": null,
+    "viewRule": null,
+    "createRule": null,
+    "updateRule": null,
+    "deleteRule": null,
+    "options": {}
+  },
+  {
+    "id": "ayowo6jod6l5ium",
+    "name": "usersView",
+    "type": "view",
+    "system": false,
+    "schema": [
+      {
+        "id": "tqdnjqsz",
+        "name": "username",
+        "type": "text",
+        "system": false,
+        "required": false,
+        "unique": false,
+        "options": {
+          "min": null,
+          "max": null,
+          "pattern": ""
+        }
+      },
+      {
+        "id": "users_name",
+        "name": "name",
+        "type": "text",
+        "system": false,
+        "required": false,
+        "unique": false,
+        "options": {
+          "min": null,
+          "max": null,
+          "pattern": ""
+        }
+      },
+      {
+        "id": "users_avatar",
+        "name": "avatar",
+        "type": "file",
+        "system": false,
+        "required": false,
+        "unique": false,
+        "options": {
+          "maxSelect": 1,
+          "maxSize": 5242880,
+          "mimeTypes": [
+            "image/jpeg",
+            "image/png",
+            "image/svg+xml",
+            "image/gif",
+            "image/webp"
+          ],
+          "thumbs": [
+            "50x50",
+            "150x150",
+            "300x300"
+          ]
+        }
+      }
+    ],
+    "listRule": "",
+    "viewRule": "",
+    "createRule": null,
+    "updateRule": null,
+    "deleteRule": null,
+    "options": {
+      "query": "SELECT id, username, name, avatar\nFROM users"
+    }
+  },
+  {
+    "id": "qwbe5de0f4a3ztp",
+    "name": "posts",
+    "type": "base",
+    "system": false,
+    "schema": [
+      {
+        "id": "tmu4jhnn",
+        "name": "title",
+        "type": "text",
+        "system": false,
+        "required": false,
+        "unique": false,
+        "options": {
+          "min": null,
+          "max": 100,
+          "pattern": ""
+        }
+      },
+      {
+        "id": "unnibdwh",
+        "name": "babble",
+        "type": "text",
+        "system": false,
+        "required": true,
+        "unique": false,
+        "options": {
+          "min": 1,
+          "max": 400,
+          "pattern": ""
+        }
+      },
+      {
+        "id": "dffp97vd",
+        "name": "long",
+        "type": "file",
+        "system": false,
+        "required": false,
+        "unique": false,
+        "options": {
+          "maxSelect": 1,
+          "maxSize": 40000,
+          "mimeTypes": [
+            "text/plain"
+          ],
+          "thumbs": []
+        }
+      },
+      {
+        "id": "vxu9fg4j",
+        "name": "images",
+        "type": "file",
+        "system": false,
+        "required": false,
+        "unique": false,
+        "options": {
+          "maxSelect": 4,
+          "maxSize": 5242880,
+          "mimeTypes": [
+            "image/png",
+            "image/jpeg",
+            "image/vnd.mozilla.apng",
+            "image/gif",
+            "video/mp4"
+          ],
+          "thumbs": [
+            "50x50",
+            "480x720",
+            "720x480",
+            "75x75"
+          ]
+        }
+      },
+      {
+        "id": "gkeeyjho",
+        "name": "author",
+        "type": "relation",
+        "system": false,
+        "required": true,
+        "unique": false,
+        "options": {
+          "collectionId": "_pb_users_auth_",
+          "cascadeDelete": true,
+          "minSelect": null,
+          "maxSelect": 1,
+          "displayFields": [
+            "name",
+            "username",
+            "avatar",
+            "id"
+          ]
+        }
+      },
+      {
+        "id": "hfsks6ag",
+        "name": "likes",
+        "type": "number",
+        "system": false,
+        "required": false,
+        "unique": false,
+        "options": {
+          "min": 0,
+          "max": null
+        }
+      },
+      {
+        "id": "n5bzgeo4",
+        "name": "reblabs",
+        "type": "number",
+        "system": false,
+        "required": false,
+        "unique": false,
+        "options": {
+          "min": 0,
+          "max": null
+        }
+      }
+    ],
+    "listRule": "",
+    "viewRule": "",
+    "createRule": "@request.auth.id = @request.data.author",
+    "updateRule": "@request.auth.id = @request.data.author && @request.auth.id = author",
+    "deleteRule": "@request.auth.id = author || @request.auth.id = 'rmtp7uxkulsc3wp'",
+    "options": {}
+  },
+  {
+    "id": "_pb_users_auth_",
+    "name": "users",
+    "type": "auth",
+    "system": false,
+    "schema": [
+      {
+        "id": "users_name",
+        "name": "name",
+        "type": "text",
+        "system": false,
+        "required": false,
+        "unique": false,
+        "options": {
+          "min": null,
+          "max": null,
+          "pattern": ""
+        }
+      },
+      {
+        "id": "users_avatar",
+        "name": "avatar",
+        "type": "file",
+        "system": false,
+        "required": false,
+        "unique": false,
+        "options": {
+          "maxSelect": 1,
+          "maxSize": 5242880,
+          "mimeTypes": [
+            "image/jpeg",
+            "image/png",
+            "image/svg+xml",
+            "image/gif",
+            "image/webp"
+          ],
+          "thumbs": [
+            "50x50",
+            "150x150",
+            "300x300"
+          ]
+        }
+      }
+    ],
+    "listRule": "id = @request.auth.id",
+    "viewRule": "id = @request.auth.id",
+    "createRule": "",
+    "updateRule": "id = @request.auth.id",
+    "deleteRule": "id = @request.auth.id",
+    "options": {
+      "allowEmailAuth": true,
+      "allowOAuth2Auth": true,
+      "allowUsernameAuth": true,
+      "exceptEmailDomains": [],
+      "manageRule": null,
+      "minPasswordLength": 8,
+      "onlyEmailDomains": null,
+      "requireEmail": true
+    }
+  },
+  {
+    "id": "xjcgbdsrd8val6z",
+    "name": "postsView",
+    "type": "view",
+    "system": false,
+    "schema": [
+      {
+        "id": "tmu4jhnn",
+        "name": "title",
+        "type": "text",
+        "system": false,
+        "required": false,
+        "unique": false,
+        "options": {
+          "min": null,
+          "max": 100,
+          "pattern": ""
+        }
+      },
+      {
+        "id": "unnibdwh",
+        "name": "babble",
+        "type": "text",
+        "system": false,
+        "required": true,
+        "unique": false,
+        "options": {
+          "min": 1,
+          "max": 400,
+          "pattern": ""
+        }
+      },
+      {
+        "id": "dffp97vd",
+        "name": "long",
+        "type": "file",
+        "system": false,
+        "required": false,
+        "unique": false,
+        "options": {
+          "maxSelect": 1,
+          "maxSize": 40000,
+          "mimeTypes": [
+            "text/plain"
+          ],
+          "thumbs": []
+        }
+      },
+      {
+        "id": "vxu9fg4j",
+        "name": "images",
+        "type": "file",
+        "system": false,
+        "required": false,
+        "unique": false,
+        "options": {
+          "maxSelect": 4,
+          "maxSize": 5242880,
+          "mimeTypes": [
+            "image/png",
+            "image/jpeg",
+            "image/vnd.mozilla.apng",
+            "image/gif",
+            "video/mp4"
+          ],
+          "thumbs": [
+            "50x50",
+            "480x720",
+            "720x480",
+            "75x75"
+          ]
+        }
+      },
+      {
+        "id": "gkeeyjho",
+        "name": "author",
+        "type": "relation",
+        "system": false,
+        "required": true,
+        "unique": false,
+        "options": {
+          "collectionId": "_pb_users_auth_",
+          "cascadeDelete": true,
+          "minSelect": null,
+          "maxSelect": 1,
+          "displayFields": [
+            "name",
+            "username",
+            "avatar",
+            "id"
+          ]
+        }
+      },
+      {
+        "id": "hfsks6ag",
+        "name": "likes",
+        "type": "number",
+        "system": false,
+        "required": false,
+        "unique": false,
+        "options": {
+          "min": 0,
+          "max": null
+        }
+      },
+      {
+        "id": "n5bzgeo4",
+        "name": "reblabs",
+        "type": "number",
+        "system": false,
+        "required": false,
+        "unique": false,
+        "options": {
+          "min": 0,
+          "max": null
+        }
+      },
+      {
+        "id": "bfjzuei4",
+        "name": "username",
+        "type": "text",
+        "system": false,
+        "required": false,
+        "unique": false,
+        "options": {
+          "min": null,
+          "max": null,
+          "pattern": ""
+        }
+      },
+      {
+        "id": "users_name",
+        "name": "name",
+        "type": "text",
+        "system": false,
+        "required": false,
+        "unique": false,
+        "options": {
+          "min": null,
+          "max": null,
+          "pattern": ""
+        }
+      },
+      {
+        "id": "users_avatar",
+        "name": "avatar",
+        "type": "file",
+        "system": false,
+        "required": false,
+        "unique": false,
+        "options": {
+          "maxSelect": 1,
+          "maxSize": 5242880,
+          "mimeTypes": [
+            "image/jpeg",
+            "image/png",
+            "image/svg+xml",
+            "image/gif",
+            "image/webp"
+          ],
+          "thumbs": [
+            "50x50",
+            "150x150",
+            "300x300"
+          ]
+        }
+      },
+      {
+        "id": "caswuu0o",
+        "name": "postDate",
+        "type": "date",
+        "system": false,
+        "required": false,
+        "unique": false,
+        "options": {
+          "min": "",
+          "max": ""
+        }
+      }
+    ],
+    "listRule": "",
+    "viewRule": "",
+    "createRule": null,
+    "updateRule": null,
+    "deleteRule": null,
+    "options": {
+      "query": "SELECT p.id, title, babble, long, images, author, likes, reblabs, u.username, u.name, u.avatar, p.updated as postDate\nFROM posts p\nJOIN users u ON p.author = u.id\nORDER BY p.updated DESC"
+    }
+  }
+]
