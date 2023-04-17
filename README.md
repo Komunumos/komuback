@@ -1,7 +1,7 @@
 # Komuback
 Komublog is a microblogging platform, but also aims to be a full fledged blogging/social platform in the future.
 
-Our goal is to always be 100% open source and get to a point where it can be easily configured for different uses. Like forums, personal blogs 
+Our goal is to always be 100% open source and get to a point where it can be easily configured for different uses. Like for forums, personal blogs, internal communication tools, etc.
 
 This project is built using a combination of SvelteKit for the frontend, and PocketBase(as a framework) for the backend. This is the backend project.
 
