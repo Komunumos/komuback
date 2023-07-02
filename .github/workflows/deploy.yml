@@ -1,9 +1,10 @@
-name: Deploy to Digital Ocean
+name: Deploy to VM
 
 on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -29,9 +30,9 @@ jobs:
 
       - name: Copy app to server
         run: |
-          sshpass -p "${{ secrets.SSH_PASSWORD }}" scp -r -o StrictHostKeyChecking=no pocketbase-new root@${{ secrets.SSH_IP }}:/root/pocketbase
+          sshpass -p "${{ secrets.SSH_PASSWORD }}" scp -r -o StrictHostKeyChecking=no pocketbase-new root@${{ secrets.SSH_IP }}:/root/komublock/back
 
-      - name: Deploy to Digital Ocean Droplet
+      - name: Deploy to VM
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_IP }}
@@ -39,7 +40,8 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
             systemctl stop pocketbase.service
-            rm /root/pocketbase/pocketbase
-            mv /root/pocketbase/pocketbase-new /root/pocketbase/pocketbase
-            rm /root/pocketbase/pocketbase-new
+            rm /root/komublock/back/pocketbase
+            mv /root/komublock/back/pocketbase-new /root/komublock/back/pocketbase
+            rm /root/komublock/back/pocketbase-new
+            ulimit -n 4096
             systemctl start pocketbase.service
