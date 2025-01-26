@@ -4,48 +4,45 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/labstack/echo/v5"
 	"github.com/pocketbase/dbx"
 	"github.com/pocketbase/pocketbase"
-	"github.com/pocketbase/pocketbase/apis"
 	"github.com/pocketbase/pocketbase/core"
 )
 
 func main() {
+	// Initialize the PocketBase app
 	app := pocketbase.New()
 
-    // Add likes endpoint
-	app.OnBeforeServe().Add(func(e *core.ServeEvent) error {
-		e.Router.AddRoute(echo.Route{
-			Method: http.MethodPut,
-			Path:   "/api/like/:postId",
-			Handler: func(c echo.Context) error {
-				id := c.PathParam("postId")
+	// Register routes during the server's initialization
+	app.OnServe().BindFunc(func(se *core.ServeEvent) error {
+		// Register a PUT route for "/api/like/{postId}"
+		se.Router.PUT("/api/like/{postId}", func(e *core.RequestEvent) error {
+			// Get the postId from the path parameter
+			postId := e.Request.PathValue("postId")
 
-				_, err := app.DB().Update("posts", dbx.Params{
-					"likes": dbx.NewExp("likes + 1"),
-				}, dbx.HashExp{"id": id}).Execute()
+			// Increment likes for the specified postId
+			_, err := e.App.DB().
+				NewQuery("UPDATE posts SET likes = likes + 1 WHERE id = {id}").
+				Bind(dbx.Params{"id": postId}).
+				Execute()
+			if err != nil {
+				return e.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to increment likes"})
+			}
 
-				if err != nil {
-					return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to increment likes"})
-				}
+			// Retrieve the updated record by ID
+			record, err := e.App.FindRecordById("posts", postId)
+			if err != nil {
+				return e.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to retrieve record"})
+			}
 
-				record, err := app.Dao().FindRecordById("posts", id)
-				if err != nil {
-					return apis.NewNotFoundError("The record does not exist.", err)
-				}
-
-				return c.JSON(http.StatusOK, record)
-			},
-			Middlewares: []echo.MiddlewareFunc{
-				apis.ActivityLogger(app),
-				apis.RequireRecordAuth(),
-			},
+			// Return the updated record as JSON
+			return e.JSON(http.StatusOK, record)
 		})
 
-		return nil
+		return se.Next()
 	})
 
+	// Start the PocketBase app
 	if err := app.Start(); err != nil {
 		log.Fatal(err)
 	}
